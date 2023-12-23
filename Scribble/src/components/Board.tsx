@@ -161,7 +161,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
         style={{
             backgroundColor: 'white',
             cursor: eraserState ? 'url(/erasur.svg), auto' : 'url(/vite.svg), auto',
-             // Set the width to 100% of the parent div
+             
           }}
    
         />

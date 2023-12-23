@@ -9,4 +9,6 @@ io.on('connection' , (socket) => {
     })
 })
 
-io.listen(5000 );
+io.listen(5000 ,  () => {
+    console.log('Server Started at 5000');
+});
