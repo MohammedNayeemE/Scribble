@@ -13,7 +13,13 @@ const CanvasDrawing = () =>{
     };
     return(
       <>
-      <div className='tools' >
+      
+        <div className="App" >
+        <h1>SCRIBBLE</h1>
+        <div style={{width:'100%'}}>
+        
+        
+        <div className='tools' >
             <div>
               <span>Color: </span>
               <input type="color" value={brushColor} onChange={(e) => setBrushColor(e.target.value)} />
@@ -28,12 +34,7 @@ const CanvasDrawing = () =>{
               <button className="btn" onClick={toggleEraser}>{isErasing ? 'DISABLE ERASER' : 'ENABLE ERASER'}</button>
             </div>
           </div>
-        <div className="App" >
-        <h1>SCRIBBLE</h1>
-        <div style={{width:'100%'}}>
-        
           <Board brushColor={brushColor} brushSize={brushSize} eraserState = {isErasing}/>
-          
         </div>
       </div>
       

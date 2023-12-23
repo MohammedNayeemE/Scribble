@@ -153,11 +153,11 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
 
     return (
         <>
-        <div className = "w-screen h-full overflow-scroll">
+        <div className="sketch">
         <canvas
         ref = {canvasRef}
-        width={1000}
-        height={600}
+        width={800}
+        height={800}
         style={{
             backgroundColor: 'white',
             cursor: eraserState ? 'url(/erasur.svg), auto' : 'url(/vite.svg), auto',
