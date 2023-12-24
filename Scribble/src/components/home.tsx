@@ -1,29 +1,33 @@
 import React from 'react'
+import NavBar from './Navbar';
 import '../App.css';
 import { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 function Home() {
     const [loading , setLoading] = useState(false);
-
-    const loding = ()=>{
+    const navigate = useNavigate();
+    const handleLoading = ()=>{
           setLoading(true);
 
           setTimeout(() =>{
-            setLoading(false)
+            setLoading(false);
+            navigate('/canvas');
           } , 5000);
+         
     }
   return (
     <>
+    <NavBar/>
     <div className='home-container'>
-        <button onClick={loding} className='btn'>
-            NEW
-        </button>
+        
         {loading ? (
         // Render a loading message or spinner while loading is true
-        <p>Loading...</p>
+        <h3>LOADING...</h3>
       ) : (
         // Render the content when loading is false
-        ''
+        <button onClick={handleLoading} className='btn'>
+            NEW
+        </button>
         
       )}
        
