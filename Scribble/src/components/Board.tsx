@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import React  , {useRef}  from 'react';
 import { Socket, io  } from "socket.io-client";
+import randomColor from 'randomcolor';
 
 interface MyBoard {
     brushColor : string;
@@ -11,7 +12,8 @@ interface MyBoard {
 
 const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
     const [socket, setSocket] = useState<Socket | null>(null);
-    
+    const [cursors, setCursors] = useState<{ [key: string]: { x: number; y: number } }>({});
+    const [userColor, setUserColor] = useState<string>(randomColor());
     useEffect(() => {
         const newSocket = io('http://localhost:5000');
         console.log(newSocket, "Connected to socket");
@@ -39,12 +41,48 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
                     ctx?.drawImage(image, 0, 0);
                 };
             });
+
+            const room = prompt('Enter room name:');
+            if (room && socket) {
+                // Join the specified room
+                socket.emit('joinRoom', room);
+            }
+
+            // Listen for userJoined event to handle new users in the room
+            socket?.on('userJoined', (userId: string) => {
+                console.log(`User ${userId} joined the room`);
+            });
+
+            socket?.on('cursorMoved', ({ userId, position }) => {
+                setCursors((prevCursors) => ({
+                    ...prevCursors,
+                    [userId]: position,
+                }));
+            });
+
+            socket?.on('userLeft' , (userId : string) =>{
+                console.log(`user ${userId} left`);
+                setCursors((prevCursors) =>{
+                    const {[userId] : _, ...newCursors} = prevCursors;
+                    return newCursors;
+                })
+                
+            })
+
+            return () =>{
+                socket.off('canvasImage');
+                socket.off('userJoined');
+                socket.off('userLeft');
+                socket.off('cusrsorMoved');
+            }
+
+
         }
     }, [socket]);
     
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-
+    
     useEffect(() => {
 
 
@@ -146,9 +184,26 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
             }
             
         };
-    }, [brushColor , brushSize , socket , eraserState]);
+    }, [brushColor , brushSize , socket , eraserState , userColor]);
 
+    const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        const canvas = canvasRef.current;
+        const rect = canvas?.getBoundingClientRect();
 
+        if (canvas && rect && socket) {
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Emit cursor position to other users
+            socket.emit('cursorMove', { x, y });
+
+            // Update cursor position for the local user
+            setCursors((prevCursors) => ({
+                ...prevCursors,
+                [socket.id]: { x, y },
+            }));
+        }
+    };
     
 
     return (
@@ -163,9 +218,38 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
             cursor: eraserState ? 'url(/erasur.svg), auto' : 'url(/vite.svg), auto',
              
           }}
+
+          onMouseMove={handleMouseMove}
    
         />
+        {Object.entries(cursors).map(([userId, position]) => (
+                    <div
+                        key={userId}
+                        style={{
+                            position: 'absolute',
+                            left: position.x,
+                            top: position.y,
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            background:userColor,
+                            
+                        }}
+                    />
+                ))}
         </div>
+        <img
+                src="/vite.svg"
+                alt="Vite Icon"
+                style={{
+                    stroke: userColor,
+                    strokeWidth: '2',
+                    strokeLinecap: 'round',
+                    strokeLinejoin: 'round',
+                    width: '24px',
+                    height: '24px',
+                }}
+            />
         
         </>
       )
