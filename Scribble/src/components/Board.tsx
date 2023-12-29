@@ -248,7 +248,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
         <div className="sketch">
         <canvas
         ref = {canvasRef}
-        width={800}
+        width={1000}
         height={800}
         style={{
             backgroundColor: 'white',
@@ -260,8 +260,8 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
    
         />
         
-        <button onClick={createRoom}>Create Room</button>
-        <button onClick={JoinRoom}>Join Room</button>
+        <button onClick={createRoom} className="btn">Create Room</button>
+        <button onClick={JoinRoom} className="btn">Join Room</button>
         {Object.entries(cursors).map(([userId, position]) => (
                     <div
                         key={userId}

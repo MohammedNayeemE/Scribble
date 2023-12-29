@@ -2,7 +2,7 @@ import './components.css';
 const NavBar = ()=>{
     return(
         <>
-    <nav style={{margin:'2px' ,padding:'2px' , border:'1px solid white' , borderRadius:'8px'}}>
+    <nav style={{margin:'2px' ,padding:'2px'   , borderRadius:'8px'}}>
         <div className='navbar'>
         <div style={{marginLeft:'5px' , cursor :'pointer' }}>
            <img src='pencil.png' width={50}/>
