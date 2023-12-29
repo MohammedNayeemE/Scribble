@@ -12,12 +12,26 @@ interface MyBoard {
 
 const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
     const [socket, setSocket] = useState<Socket | null>(null);
+    const [room , setRoom] = useState<string>('');
     const [cursors, setCursors] = useState<{ [key: string]: { x: number; y: number } }>({});
     const [userColor, setUserColor] = useState<string>(randomColor());
     useEffect(() => {
         const newSocket = io('http://localhost:5000');
-        console.log(newSocket, "Connected to socket");
-        setSocket(newSocket);
+        
+        newSocket.on('connect' , () =>{
+            console.log(newSocket , `Connection Establised`);
+            
+            setSocket(newSocket);
+            
+            
+            
+        })
+        
+        
+        return () =>{
+            newSocket.disconnect();
+        }
+
     }, []);
 
     
@@ -27,6 +41,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
 
         if (socket) {
             // Event listener for receiving canvas data from the socket
+
             socket.on('canvasImage', (data:any) => {
                 // Create an image object from the data URL
                 const image = new Image();
@@ -42,11 +57,11 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
                 };
             });
 
-            const room = prompt('Enter room name:');
-            if (room && socket) {
+            /*
+            if (room) {
                 // Join the specified room
                 socket.emit('joinRoom', room);
-            }
+            }*/
 
             // Listen for userJoined event to handle new users in the room
             socket?.on('userJoined', (userId: string) => {
@@ -184,7 +199,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
             }
             
         };
-    }, [brushColor , brushSize , socket , eraserState , userColor]);
+    }, [brushColor , brushSize , socket , eraserState , userColor , room]);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current;
@@ -204,6 +219,28 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
             }));
         }
     };
+
+    const createRoom  = () =>{
+        const roomName = `room-${Math.floor(Math.random() * 1000)}${socket?.id}`;
+        if(socket){
+            socket.emit('joinRoom' , roomName);
+        }
+        setRoom(roomName);
+        
+        console.log(roomName);
+        
+    }
+    const JoinRoom = () =>{
+        const newRoom = prompt(`enter the room link to join`);
+        
+        
+        if(socket){
+            socket.emit('joinRoom' , String(newRoom));
+        }
+        if(newRoom){
+            setRoom(newRoom);
+        }
+    }
     
 
     return (
@@ -222,6 +259,9 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
           onMouseMove={handleMouseMove}
    
         />
+        
+        <button onClick={createRoom}>Create Room</button>
+        <button onClick={JoinRoom}>Join Room</button>
         {Object.entries(cursors).map(([userId, position]) => (
                     <div
                         key={userId}
@@ -238,18 +278,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
                     />
                 ))}
         </div>
-        <img
-                src="/vite.svg"
-                alt="Vite Icon"
-                style={{
-                    stroke: userColor,
-                    strokeWidth: '2',
-                    strokeLinecap: 'round',
-                    strokeLinejoin: 'round',
-                    width: '24px',
-                    height: '24px',
-                }}
-            />
+       
         
         </>
       )

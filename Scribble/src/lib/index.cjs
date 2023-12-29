@@ -13,11 +13,14 @@ io.on('connection' , (socket) => {
         io.to(room).emit('userJoined' , socket.id);
 
         socket.on('cursorMove', (position) => {
-            io.to(room).emit('cursorMoved', { userId: socket.id, position });
+            io.to(rooms[socket.id]).emit('cursorMoved', { userId: socket.id, position });
+            
         });
+
     })
     socket.on('canvasImage' , (data) => {
-        socket.broadcast.emit('canvasImage' , data);
+        io.to(rooms[socket.id]).emit('canvasImage' , data);
+        console.log(rooms);
         
     })
 
