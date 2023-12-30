@@ -1,0 +1,44 @@
+{Object.entries(cursors).map(([userId, position]) => (
+                    <div
+                        key={userId}
+                        style={{
+                            position: 'absolute',
+                            left: position.x,
+                            top: position.y,
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            background:userColor,
+                            
+                        }}
+                    />
+                ))}
+const [userColor, setUserColor] = useState<string>(randomColor());
+
+const [cursors, setCursors] = useState<{ [key: string]: { x: number; y: number } }>({});
+
+socket?.on('cursorMoved', ({ userId, position }) => {
+                setCursors((prevCursors) => ({
+                    ...prevCursors,
+                    [userId]: position,
+                }));
+            });
+
+const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+        const canvas = canvasRef.current;
+        const rect = canvas?.getBoundingClientRect();
+
+        if (canvas && rect && socket) {
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Emit cursor position to other users
+            socket.emit('cursorMove', { x, y });
+
+            // Update cursor position for the local user
+            setCursors((prevCursors) => ({
+                ...prevCursors,
+                [socket.id]: { x, y },
+            }));
+        }
+    };

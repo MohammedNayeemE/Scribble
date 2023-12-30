@@ -2,19 +2,21 @@ import { useEffect } from "react";
 import { useState } from "react";
 import React  , {useRef}  from 'react';
 import { Socket, io  } from "socket.io-client";
-import randomColor from 'randomcolor';
+import ChatBox from "./ChatBox";
+
 
 interface MyBoard {
     brushColor : string;
     brushSize  : number;
     eraserState : boolean;
+    chatroom : boolean;
 }
 
-const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
+const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatroom}) => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [room , setRoom] = useState<string>('');
-    const [cursors, setCursors] = useState<{ [key: string]: { x: number; y: number } }>({});
-    const [userColor, setUserColor] = useState<string>(randomColor());
+    
+    
     useEffect(() => {
         const newSocket = io('http://localhost:5000');
         
@@ -68,19 +70,11 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
                 console.log(`User ${userId} joined the room`);
             });
 
-            socket?.on('cursorMoved', ({ userId, position }) => {
-                setCursors((prevCursors) => ({
-                    ...prevCursors,
-                    [userId]: position,
-                }));
-            });
+            
 
             socket?.on('userLeft' , (userId : string) =>{
                 console.log(`user ${userId} left`);
-                setCursors((prevCursors) =>{
-                    const {[userId] : _, ...newCursors} = prevCursors;
-                    return newCursors;
-                })
+                
                 
             })
 
@@ -199,26 +193,9 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
             }
             
         };
-    }, [brushColor , brushSize , socket , eraserState , userColor , room]);
+    }, [brushColor , brushSize , socket , eraserState  , room]);
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-        const canvas = canvasRef.current;
-        const rect = canvas?.getBoundingClientRect();
-
-        if (canvas && rect && socket) {
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            // Emit cursor position to other users
-            socket.emit('cursorMove', { x, y });
-
-            // Update cursor position for the local user
-            setCursors((prevCursors) => ({
-                ...prevCursors,
-                [socket.id]: { x, y },
-            }));
-        }
-    };
+    
 
     const createRoom  = () =>{
         const roomName = `room-${Math.floor(Math.random() * 1000)}${socket?.id}`;
@@ -245,6 +222,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
 
     return (
         <>
+        <div className="grid">
         <div className="sketch">
         <canvas
         ref = {canvasRef}
@@ -256,27 +234,18 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState}) => {
              
           }}
 
-          onMouseMove={handleMouseMove}
+          
    
         />
         
         <button onClick={createRoom} className="btn">Create Room</button>
         <button onClick={JoinRoom} className="btn">Join Room</button>
-        {Object.entries(cursors).map(([userId, position]) => (
-                    <div
-                        key={userId}
-                        style={{
-                            position: 'absolute',
-                            left: position.x,
-                            top: position.y,
-                            width: '10px',
-                            height: '10px',
-                            borderRadius: '50%',
-                            background:userColor,
-                            
-                        }}
-                    />
-                ))}
+        
+        </div>
+        {
+            chatroom ? <ChatBox/> : <div></div>
+        }
+        
         </div>
        
         

@@ -4,13 +4,16 @@ import {useState} from 'react';
 
 const CanvasDrawing = () =>{
 
-    const [brushColor, setBrushColor] = useState('black');
+    const [brushColor, setBrushColor] = useState<string>('black');
     const [brushSize, setBrushSize] = useState<number>(5);
-    const [isErasing , setIsErasing] = useState(false);
-
+    const [isErasing , setIsErasing] = useState<boolean>(false);
+    const [croomopen , setcroomopen] = useState<boolean>(false);
     const toggleEraser = () => {
       setIsErasing(!isErasing);
     };
+    const toggleChatRoom = () =>{
+      setcroomopen(!croomopen);
+    }
     return(
       <>
       
@@ -33,8 +36,11 @@ const CanvasDrawing = () =>{
             <div>
               <button className="btn" onClick={toggleEraser}>{isErasing ? 'DISABLE ERASER' : 'ENABLE ERASER'}</button>
             </div>
+            <div style={{color:'white'}}>
+              <button className="btn" onClick = {toggleChatRoom}>CHAT ROOM</button>
+            </div>
           </div>
-          <Board brushColor={brushColor} brushSize={brushSize} eraserState = {isErasing}/>
+          <Board brushColor={brushColor} brushSize={brushSize} eraserState = {isErasing} chatroom = {croomopen}/>
         </div>
       </div>
       

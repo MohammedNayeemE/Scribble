@@ -23,3 +23,27 @@
     cursor: pointer;
   }
   
+
+  .chat-box{
+    display: flex;
+    flex-direction: column;
+    
+    justify-content: flex-end;
+    align-items: flex-start;
+    background-color: aliceblue;
+    padding: 3px;
+  }
+  .chatting-area{
+    padding: 1em;
+
+  }
+  input{
+    margin: 3px;
+    border: none;
+    border-radius: 4px;
+    padding: 3px;
+
+  }
+  input:focus{
+    outline: none;
+  }
