@@ -218,6 +218,14 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
             setRoom(newRoom);
         }
     }
+
+    const sendMessage = (message:string) =>{
+        console.log(message);
+        
+        if(socket && room){
+            socket.emit('sendMessage' , message);
+        }
+    }
     
 
     return (
@@ -243,7 +251,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         
         </div>
         {
-            chatroom ? <ChatBox/> : <div></div>
+            chatroom ? <ChatBox sendMessage = {sendMessage} Socket = {socket}/> : <div></div>
         }
         
         </div>

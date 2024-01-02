@@ -22,7 +22,17 @@ io.on('connection' , (socket) => {
         io.to(rooms[socket.id]).emit('canvasImage' , data);
         
         
+        
     })
+
+    socket.on('sendMessage' , (message) =>{
+
+        io.to(rooms[socket.id]).emit('message', { userid: socket.id, chat : message });
+        console.log(rooms);
+        
+    });
+    
+
 
     socket.on('disconnect', () => {
         const room = rooms[socket.id];

@@ -22,7 +22,7 @@ function Home() {
         
         {loading ? (
         // Render a loading message or spinner while loading is true
-        <h3>LOADING...</h3>
+        <div className="lds-ripple"><div></div><div></div></div>
       ) : (
         // Render the content when loading is false
         <button onClick={handleLoading} className='btn'>
