@@ -3,6 +3,7 @@ import { useState } from "react";
 import React  , {useRef}  from 'react';
 import { Socket, io  } from "socket.io-client";
 import ChatBox from "./ChatBox";
+import PopModal from "./popmodel";
 
 
 interface MyBoard {
@@ -15,6 +16,7 @@ interface MyBoard {
 const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatroom}) => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [room , setRoom] = useState<string>('');
+    const [showModal , setShowModal] = useState<boolean>(false);
     
     
     useEffect(() => {
@@ -204,7 +206,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         }
         setRoom(roomName);
         
-        console.log(roomName);
+        setShowModal(true);
         
     }
     const JoinRoom = () =>{
@@ -256,6 +258,9 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         
         </div>
        
+       {
+        showModal ? <PopModal ShowState = {showModal} roomid = {room}/> : ''
+       }
         
         </>
       )
