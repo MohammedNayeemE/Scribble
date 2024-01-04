@@ -12,7 +12,7 @@ function Home() {
           setTimeout(() =>{
             setLoading(false);
             navigate('/canvas');
-          } , 5000);
+          } , 3000);
          
     }
   return (

@@ -4,8 +4,9 @@ import React  , {useRef}  from 'react';
 import { Socket, io  } from "socket.io-client";
 import ChatBox from "./ChatBox";
 import PopModal from "./popmodel";
-
-
+import Joinpopmodal from "./joinpopmodal";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 interface MyBoard {
     brushColor : string;
     brushSize  : number;
@@ -17,7 +18,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
     const [socket, setSocket] = useState<Socket | null>(null);
     const [room , setRoom] = useState<string>('');
     const [showModal , setShowModal] = useState<boolean>(false);
-    
+    const [joinshowModal , setjoinshowModal] = useState<boolean>(false);
     
     useEffect(() => {
         const newSocket = io('http://localhost:5000');
@@ -195,30 +196,39 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
             }
             
         };
-    }, [brushColor , brushSize , socket , eraserState  , room]);
+    }, [brushColor , brushSize , socket  ,eraserState , room]);
 
     
-
+    const CRnotify = () => toast.success("ROOM CREATED 😊");
+    const JRnotify = () => toast.success("Joined Room")
     const createRoom  = () =>{
         const roomName = `room-${Math.floor(Math.random() * 1000)}${socket?.id}`;
         if(socket){
             socket.emit('joinRoom' , roomName);
         }
-        setRoom(roomName);
+        console.log(roomName);
         
+        setRoom(roomName);
+        CRnotify();
         setShowModal(true);
         
+        
     }
-    const JoinRoom = () =>{
-        const newRoom = prompt(`enter the room link to join`);
+    
+    const joinRoomButtonHandler = () =>{
         
-        
+        setjoinshowModal(!joinshowModal);
+    }
+
+    const joinRoom = (roomid : string) =>{
         if(socket){
-            socket.emit('joinRoom' , String(newRoom));
+            socket.emit('joinRoom' , roomid);
         }
-        if(newRoom){
-            setRoom(newRoom);
+        if(roomid){
+            setRoom(roomid);
         }
+        JRnotify();
+        
     }
 
     const sendMessage = (message:string) =>{
@@ -232,6 +242,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
 
     return (
         <>
+        <ToastContainer/>
         <div className="grid">
         <div className="sketch">
         <canvas
@@ -249,17 +260,20 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         />
         
         <button onClick={createRoom} className="btn">Create Room</button>
-        <button onClick={JoinRoom} className="btn">Join Room</button>
+        <button onClick={joinRoomButtonHandler} className="btn">Join Room</button>
         
         </div>
         {
-            chatroom ? <ChatBox sendMessage = {sendMessage} Socket = {socket}/> : <div></div>
+            chatroom ? <ChatBox sendMessage = {sendMessage} Socket = {socket} /> : <div></div>
         }
         
         </div>
        
        {
-        showModal ? <PopModal ShowState = {showModal} roomid = {room}/> : ''
+        showModal ? <PopModal ShowState = {showModal} roomid = {room} /> : ''
+       }
+       {
+         joinshowModal ? <Joinpopmodal ShowState={joinshowModal} JoinRoom={joinRoomButtonHandler} OnClick = {joinRoom}/> : ''
        }
         
         </>

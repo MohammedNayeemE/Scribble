@@ -5,14 +5,18 @@ interface Chat {
     userid : string ,
     chat : string
 }
+interface Req{
+  sendMessage : (message:string) => void;
+  Socket : any;
+}
 
 
-function ChatBox({sendMessage , Socket}) {
+function ChatBox({sendMessage , Socket}:Req) {
 
     const [chats, setChats] = useState<Chat[]>([
         {
-          userid: 'user101yuwhn',
-          chat: 'boiler',
+          userid: '',
+          chat: '',
         },
       ]);
 

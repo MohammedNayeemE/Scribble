@@ -4,10 +4,11 @@ import { useState } from 'react';
 import { Modal } from "react-bootstrap";
 
 interface Req{
-  ShowState : boolean,
-  roomid : string
+  ShowState : boolean;
+  roomid : string;
+  
 }
-function PopModal({ShowState , roomid} : Req) {
+function PopModal({ShowState , roomid } : Req) {
   const [show , setshow] = useState<boolean>(ShowState);
   const handleClose = () =>{
     setshow(false);
