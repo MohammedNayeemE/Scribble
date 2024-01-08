@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'ScribbleFont';
+  src: url('/fonts/scribble-font.ttf') format('truetype');
+  /* Add other font properties as needed */
+}
+
 
 .navbar{
     display: flex;
@@ -39,14 +45,23 @@
   }
   input{
     margin: 3px;
-    border: none;
+    
     border-radius: 4px;
     padding: 3px;
 
   }
   input:focus{
-    outline: none;
+    outline: rgb(95, 134, 233);
   }
+
+
+
+
+
+
+
+
+  
   .lds-ripple {
     display: inline-block;
     position: relative;

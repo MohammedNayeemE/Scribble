@@ -29,8 +29,12 @@ function Joinpopmodal({ShowState , JoinRoom , OnClick}:Req) {
            ENTER ROOM ID
         </Modal.Header>
         <Modal.Body>
+          <div style={{marginBottom:'3px' , }}>
           <input type='text' value={text} onChange={(e)=>setText(e.target.value)}/>
+          </div>
+          <div>
           <Button onClick={handleClick}>JOIN</Button>
+          </div>
         </Modal.Body>
       </Modal>
     )

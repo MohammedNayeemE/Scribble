@@ -14,8 +14,8 @@ const NavBar = ()=>{
             <li>STATUS</li>
             
         </div>
-        <div className='profile' style={{marginRight:'5px' , border:'2px solid white' , padding:'15px' , cursor:'pointer'}} >
-                    <p >PROFILE</p>
+        <div className='profile' style={{marginRight:'5px' , border:'2px solid white'  , borderRadius : '3px' ,padding:'10px' , cursor:'pointer'}} >
+                <button style={{background:'none' , padding:'2px' , border:'none'  }}>PROFILE</button>
             </div>
         </div>
     </nav>

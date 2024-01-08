@@ -13,6 +13,8 @@
                         }}
                     />
                 ))}
+
+                pata nahi kya chul machi thi ki ye banaya
 const [userColor, setUserColor] = useState<string>(randomColor());
 
 const [cursors, setCursors] = useState<{ [key: string]: { x: number; y: number } }>({});
@@ -42,3 +44,5 @@ const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
             }));
         }
     };
+
+    chalo kuch toh sikha ki mouseEvent bhi hota hey

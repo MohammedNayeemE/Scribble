@@ -128,9 +128,11 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
                     ctx.beginPath();
                     ctx.moveTo(lastX, lastY);
                     if (eraserState) {
-                        ctx.globalCompositeOperation = 'destination-out';
+                       // ctx.globalCompositeOperation = 'destination-out';
+                       ctx.strokeStyle = 'white';
+                       ctx.lineWidth = brushSize;
                       } else {
-                        ctx.globalCompositeOperation = 'source-over';
+                       // ctx.globalCompositeOperation = 'source-over';
                         ctx.strokeStyle = brushColor;
                         ctx.lineWidth = brushSize;
                       }
@@ -258,9 +260,10 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
           
    
         />
-        
+        <div style={{display:'flex'}}>
         <button onClick={createRoom} className="btn">Create Room</button>
         <button onClick={joinRoomButtonHandler} className="btn">Join Room</button>
+        </div>
         
         </div>
         {

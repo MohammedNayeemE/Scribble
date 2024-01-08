@@ -39,8 +39,8 @@ body{
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    padding: 1em;
-    background-color: black;
+    
+    background-color: #d61ac4;
     color: white;
     z-index: 100;
   }
@@ -53,12 +53,14 @@ h1 {
 
 .btn{
     background-color: black !important;
+    font-family: 'Comic Sans MS' !important;
     color: white !important;
     padding: 1em !important;
     font-size:large !important;
     border: 1px solid rgb(68, 63, 63) !important;
     border-radius: 8px !important;
     transition: transform 0.3s !important;
+    margin: 2px;
 }
 .btn:hover{
     cursor:pointer;
@@ -73,9 +75,10 @@ h1 {
 }
 
 input {
-    margin: 0 5px !important;
-    width: 100% !important;
-    height: 35px !important;
+  margin: 0 5px !important;
+  width: 100% !important;
+  height: 35px !important;
+  border: 1px solid black;
 }
 
 

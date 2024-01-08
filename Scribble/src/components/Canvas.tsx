@@ -18,17 +18,19 @@ const CanvasDrawing = () =>{
       <>
       
         <div className="App" >
-        <h1>SCRIBBLE</h1>
+          
+        <h1 style={{fontFamily:'Comic Sans MS'}}>SCRIBBLE</h1>
+        
         <div style={{width:'100%'}}>
         
         
         <div className='tools' >
             <div>
-              <span>Color: </span>
+              <span style={{fontFamily:'Comic Sans MS'}}>COLOR: </span>
               <input type="color" value={brushColor} onChange={(e) => setBrushColor(e.target.value)} />
             </div>
             <div>
-              <span>Size: </span>
+              <span style={{fontFamily:'Comic Sans MS'}}>SIZE: </span>
               <input type="range" color='#fac176'
                 min="1" max="100" value={brushSize} onChange={(e) => setBrushSize(Number(e.target.value))} />
               <span>{brushSize}</span>
