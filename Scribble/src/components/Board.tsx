@@ -6,6 +6,7 @@ import ChatBox from "./ChatBox";
 import PopModal from "./popmodel";
 import Joinpopmodal from "./joinpopmodal";
 import { ToastContainer, toast } from 'react-toastify';
+import { getImage } from "../utility/image";
 import 'react-toastify/dist/ReactToastify.css';
 interface MyBoard {
     brushColor : string;
@@ -16,6 +17,7 @@ interface MyBoard {
 
 const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatroom}) => {
     const [socket, setSocket] = useState<Socket | null>(null);
+    const [imagedata , setimagedata] = useState('');
     const [room , setRoom] = useState<string>('');
     const [showModal , setShowModal] = useState<boolean>(false);
     const [joinshowModal , setjoinshowModal] = useState<boolean>(false);
@@ -32,6 +34,10 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
             
         })
         
+        newSocket.on('disconnect' , ()=>{
+            console.log(`user exited`);
+            
+        })
         
         return () =>{
             newSocket.disconnect();
@@ -50,8 +56,10 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
             socket.on('canvasImage', (data:any) => {
                 // Create an image object from the data URL
                 const image = new Image();
+                
                 image.src = data;
-
+                
+                
 
                 const canvas = canvasRef.current;
                 // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -202,7 +210,8 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
 
     
     const CRnotify = () => toast.success("ROOM CREATED 😊");
-    const JRnotify = () => toast.success("Joined Room")
+    const JRnotify = () => toast.success("Joined Room");
+    const ERnotify = () => toast.error('EXITED ROOM 🤡');
     const createRoom  = () =>{
         const roomName = `room-${Math.floor(Math.random() * 1000)}${socket?.id}`;
         if(socket){
@@ -241,7 +250,14 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         }
     }
     
-
+    const exit = () =>{
+        if(socket){
+            socket.disconnect();
+            
+        }
+        ERnotify();
+        
+    }
     return (
         <>
         <ToastContainer/>
@@ -263,6 +279,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         <div style={{display:'flex'}}>
         <button onClick={createRoom} className="btn">Create Room</button>
         <button onClick={joinRoomButtonHandler} className="btn">Join Room</button>
+        <button onClick={exit} className="btn">EXIT</button>
         </div>
         
         </div>

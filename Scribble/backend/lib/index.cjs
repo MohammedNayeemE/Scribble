@@ -20,7 +20,8 @@ io.on('connection' , (socket) => {
     })
     socket.on('canvasImage' , (data) => {
         io.to(rooms[socket.id]).emit('canvasImage' , data);
-        
+        console.log('image data');
+        console.log(rooms);
         
         
     })
@@ -28,7 +29,7 @@ io.on('connection' , (socket) => {
     socket.on('sendMessage' , (message) =>{
 
         io.to(rooms[socket.id]).emit('message', { userid: socket.id, chat : message });
-        console.log(rooms);
+        console.log(rooms); 
         
     });
     
@@ -40,7 +41,8 @@ io.on('connection' , (socket) => {
             io.to(room).emit('userLeft', socket.id);
             delete rooms[socket.id];
         }
-    });
+        console.log(rooms);
+    });                                                                                                                                                                         
 
 
 })
