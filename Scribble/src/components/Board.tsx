@@ -14,7 +14,10 @@ interface MyBoard {
     eraserState : boolean;
     chatroom : boolean;
 }
-
+const customstyle = {
+    backgroundImage: 'radial-gradient(rgb(192, 197, 206) 1px, white 1px)',
+    backgroundSize:'15px 15px',
+}
 const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatroom}) => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [imagedata , setimagedata] = useState('');
@@ -102,7 +105,15 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
     
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    
+    useEffect(()=>{
+         const canvas: HTMLCanvasElement | null = canvasRef.current;
+         const container = canvas?.parentElement;
+         if(canvas && container){
+         canvas.width = container.clientWidth;
+         canvas.height = container.clientHeight   
+        }
+
+    },[])
     useEffect(() => {
 
 
@@ -114,7 +125,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         const canvas: HTMLCanvasElement | null = canvasRef.current;
         const ctx = canvasRef.current?.getContext('2d');
 
-
+       
         const startDrawing = (e: { offsetX: number; offsetY: number; }) => {
             isDrawing = true;
 
@@ -261,33 +272,34 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
     return (
         <>
         <ToastContainer/>
-        <div className="grid">
-        <div className="sketch">
-        <canvas
-        ref = {canvasRef}
-        width={1000}
-        height={800}
+ <div className="sketch">
+    
+        <canvas 
+         ref = {canvasRef}
+        
+        
         style={{
-            backgroundColor: 'white',
+            background: 'radial-gradient(rgb(192, 197, 206) 1px, white 1px)',
+            backgroundSize: '15px 15px',
             cursor: eraserState ? 'url(/erasur.svg), auto' : 'url(/vite.svg), auto',
              
           }}
-
-          
+        ></canvas>
+       
+    </div>
+<div className="grid">
    
-        />
-        <div style={{display:'flex'}}>
+    <div style={{display:'flex'}}>
         <button onClick={createRoom} className="btn">Create Room</button>
         <button onClick={joinRoomButtonHandler} className="btn">Join Room</button>
         <button onClick={exit} className="btn">EXIT</button>
-        </div>
         
-        </div>
+    </div>
         {
             chatroom ? <ChatBox sendMessage = {sendMessage} Socket = {socket} /> : <div></div>
         }
         
-        </div>
+</div>
        
        {
         showModal ? <PopModal ShowState = {showModal} roomid = {room} /> : ''
@@ -298,7 +310,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         
         </>
       )
-
+      
     }
 
     export default Board;

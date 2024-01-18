@@ -19,7 +19,7 @@ const CanvasDrawing = () =>{
       
         <div className="App" >
           
-        <h1 style={{fontFamily:'Comic Sans MS'}}>SCRIBBLE</h1>
+        <h1 style={{fontFamily:'Comic Sans MS' , color:'black'}}>SCRIBBLE</h1>
         
         <div style={{width:'100%'}}>
         

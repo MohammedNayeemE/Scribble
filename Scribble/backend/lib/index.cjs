@@ -20,8 +20,7 @@ io.on('connection' , (socket) => {
     })
     socket.on('canvasImage' , (data) => {
         io.to(rooms[socket.id]).emit('canvasImage' , data);
-        console.log('image data');
-        console.log(rooms);
+        
         
         
     })

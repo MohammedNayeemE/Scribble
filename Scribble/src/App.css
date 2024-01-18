@@ -11,16 +11,21 @@
     
 }
 body{
-  background-color: #4158D0 ;
-  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+ /* background-color: #4158D0 ;
+ 
+ background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%); 
+ */
 }
 
 .sketch{
-  width: 100%;
-  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
+
+  /* display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-start; */
 }
 
 .home-container{
@@ -28,7 +33,8 @@ body{
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: url(/dot.jpg);
+  background:     radial-gradient(rgb(192, 197, 206) 1px, white 1px);
+  background-size: 50px 50px;
 }
 
 .tools {
@@ -48,7 +54,7 @@ body{
 h1 {
     margin-bottom: 1rem !important;
     text-align: center !important;
-    color: white !important;
+   
 }
 
 .btn{
@@ -70,7 +76,7 @@ h1 {
 
 .grid {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* Two equal columns for "sketch" and "ChatBox" */
+ /* grid-template-columns: 2fr 1fr;  Two equal columns for "sketch" and "ChatBox" */
   gap: 20px; /* Adjust the gap as needed */
 }
 
