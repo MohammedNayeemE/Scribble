@@ -3,7 +3,22 @@
   src: url('/fonts/scribble-font.ttf') format('truetype');
   /* Add other font properties as needed */
 }
-
+.btn{
+    background-color: black !important;
+    font-family: 'Comic Sans MS' !important;
+    color: white !important;
+    /* padding: 1em !important; */
+    font-size:large !important;
+    border: 1px solid rgb(68, 63, 63) !important;
+    border-radius: 8px !important;
+    transition: transform 0.3s !important;
+    margin: 2px;
+}
+.btn:hover{
+    cursor:pointer;
+    animation: glow 1s infinite;
+    transform: scale(1.1);
+}
 
 .navbar{
     display: flex;

@@ -13,12 +13,13 @@ interface MyBoard {
     brushSize  : number;
     eraserState : boolean;
     chatroom : boolean;
+    
 }
 const customstyle = {
     backgroundImage: 'radial-gradient(rgb(192, 197, 206) 1px, white 1px)',
     backgroundSize:'15px 15px',
 }
-const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatroom}) => {
+const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatroom }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [imagedata , setimagedata] = useState('');
     const [room , setRoom] = useState<string>('');
@@ -114,6 +115,8 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         }
 
     },[])
+
+    
     useEffect(() => {
 
 
@@ -261,14 +264,12 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         }
     }
     
-    const exit = () =>{
-        if(socket){
-            socket.disconnect();
-            
-        }
-        ERnotify();
-        
+   const exit = () =>{
+    if(socket){
+        socket.disconnect();
     }
+    ERnotify();
+   }
     return (
         <>
         <ToastContainer/>
