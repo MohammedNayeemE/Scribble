@@ -273,6 +273,28 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
     return (
         <>
         <ToastContainer/>
+{/* {
+            chatroom ? 
+                 <div
+            style={{
+               width: chatroom ? '25%' : '0',
+              overflowX: 'hidden',
+              transition: 'width 0.5s',
+              display:'flex',
+              flexShrink:'1',
+              flexDirection:'column',
+              padding:'10px',
+              alignItems:'flex-start',
+              justifyContent:'flex-end',
+             // position:'absolute'
+            }}
+          >
+                    <ChatBox sendMessage={sendMessage} Socket={socket}/> 
+                    
+                    </div>
+                    : <div></div>
+ 
+        } */}
  <div className="sketch">
     
         <canvas 
@@ -282,12 +304,27 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         style={{
             background: 'radial-gradient(rgb(192, 197, 206) 1px, white 1px)',
             backgroundSize: '15px 15px',
-            cursor: eraserState ? 'url(/erasur.svg), auto' : 'url(/vite.svg), auto',
+            cursor: eraserState ? 'url(/nerasur.svg), auto' : 'url(/vite.svg), auto',
              
           }}
         ></canvas>
+        
+        
+ <div 
+    style={{
+        position:'absolute',
+        transition : 'transform 0.5s',
+        right :0,
+        transform : `translateX(${chatroom ? '0' : '100%'})`,
+
+        
+    }}>
+        {chatroom ?     <ChatBox sendMessage={sendMessage} Socket={socket}/> : ''
+}
+    </div>
        
     </div>
+   
 <div className="grid">
    
     <div style={{display:'flex'}}>
@@ -296,11 +333,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
         <button onClick={exit} className="btn">EXIT</button>
         
     </div>
-        {
-            chatroom ? <ChatBox sendMessage = {sendMessage} Socket = {socket} /> : <div></div>
-        }
-        
-</div>
+        </div>
        
        {
         showModal ? <PopModal ShowState = {showModal} roomid = {room} /> : ''

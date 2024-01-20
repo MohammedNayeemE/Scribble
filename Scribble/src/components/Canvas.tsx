@@ -1,7 +1,6 @@
 import Board from "./Board";
 import '../App.css';
 import {useState} from 'react';
-
 const CanvasDrawing = () =>{
 
     const [brushColor, setBrushColor] = useState<string>('black');
@@ -26,7 +25,8 @@ const CanvasDrawing = () =>{
         <h1 style={{ fontFamily: 'Comic Sans MS', color: 'black' }}>SCRIBBLE</h1>
         <div style={{
           display:'flex',
-          width:'100%'
+          width:'100%',
+          justifyContent:'space-between'
         }}>
             
               <img src= {
@@ -35,10 +35,16 @@ const CanvasDrawing = () =>{
                alt="close button" onClick={toggleSideBar}
                style={{cursor:'pointer'}} 
                />
+              <img src= {
+                'meeting.png'
+              }
+               alt="close button" onClick={toggleChatRoom}
+               style={{cursor:'pointer' ,  border:'none' , background : croomopen ? 'red' : '#0CED50'}} 
+               />
             
 
         </div>
-               <div style={{ display: 'flex', height: '100%' }}>
+        <div style={{ display: 'flex', height: '100%' }}>
           {/* Sidebar */}
           
           <div
@@ -50,7 +56,7 @@ const CanvasDrawing = () =>{
               flexShrink:'1',
               flexDirection:'column',
               padding:'10px',
-              alignItems:'center',
+              alignItems:'flex-end',
              // position:'absolute'
             }}
           >
@@ -72,15 +78,15 @@ const CanvasDrawing = () =>{
                 <span>{brushSize}</span>
               </div>
               <div>
-                <button className="btn" onClick={toggleEraser}>
-                  {isErasing ? 'DISABLE ERASER' : 'ENABLE ERASER'}
-                </button>
+                <img src={isErasing ? 'diseraser.svg' : 'erasur.svg'} alt="erasurpic" style={{
+                  cursor:'pointer',
+                  margin:'3px'
+                }}
+                onClick={toggleEraser}
+                />
               </div>
-              <div style={{ color: 'white' }}>
-                <button className="btn" onClick={toggleChatRoom}>
-                  CHAT ROOM
-                </button>
-              </div>
+              
+              
               <div>
                   <button  className="btn">EXIT</button>
               </div>
@@ -91,6 +97,10 @@ const CanvasDrawing = () =>{
           <div style={{ flex: '1', overflowY: 'auto', padding: '5px' }}>
             <Board brushColor={brushColor} brushSize={brushSize} eraserState={isErasing} chatroom={croomopen}  />
           </div>
+
+
+
+
         </div>
       </div>
     </>

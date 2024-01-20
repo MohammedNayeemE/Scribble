@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 interface Chat {
@@ -72,18 +71,4 @@ function ChatBox({sendMessage , Socket}:Req) {
 export default ChatBox;
 
 
-  // if (text) {
-        //   // Update the state using the functional form of setChats
-        //   setChats(prevChats => [
-        //     ...prevChats,
-        //     {
-        //       userid: 'newUserId', // Replace with the actual user id
-        //       chat: text,
-        //     },
-        //   ]);
-    
-        //   // Clear the input field after updating the state
-        //   console.log(chats);
-        //   setText('');
-
-        // }
+  
