@@ -87,9 +87,6 @@ const CanvasDrawing = () =>{
               </div>
               
               
-              <div>
-                  <button  className="btn">EXIT</button>
-              </div>
             </div>
           </div>
 

@@ -12,11 +12,15 @@ const NavBar = ()=>{
             <li>ABOUT</li>
             <li>CONTACTUS</li>
             <li>STATUS</li>
-            
+         <div>
+            <img src='chefewa.jpg' alt='profile pic' 
+            style= {{
+              border:'none' , borderRadius:'50%' ,width:'50px' , cursor:'pointer'
+            }}
+            />
+        </div>   
         </div>
-        <div className='profile' style={{marginRight:'5px' , border:'2px solid white'  , borderRadius : '3px' ,padding:'10px' , cursor:'pointer'}} >
-                <button style={{background:'none' , padding:'2px' , border:'none'  }}>PROFILE</button>
-            </div>
+        
         </div>
     </nav>
     

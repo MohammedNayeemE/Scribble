@@ -6,7 +6,7 @@ import ChatBox from "./ChatBox";
 import PopModal from "./popmodel";
 import Joinpopmodal from "./joinpopmodal";
 import { ToastContainer, toast } from 'react-toastify';
-import { getImage } from "../utility/image";
+
 import 'react-toastify/dist/ReactToastify.css';
 interface MyBoard {
     brushColor : string;
@@ -15,10 +15,7 @@ interface MyBoard {
     chatroom : boolean;
     
 }
-const customstyle = {
-    backgroundImage: 'radial-gradient(rgb(192, 197, 206) 1px, white 1px)',
-    backgroundSize:'15px 15px',
-}
+
 const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatroom }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [imagedata , setimagedata] = useState('');
@@ -226,16 +223,22 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
     const CRnotify = () => toast.success("ROOM CREATED 😊");
     const JRnotify = () => toast.success("Joined Room");
     const ERnotify = () => toast.error('EXITED ROOM 🤡');
+    const SRnotify = () => toast.error('SERVER ERROR ☠️☠️');
     const createRoom  = () =>{
-        const roomName = `room-${Math.floor(Math.random() * 1000)}${socket?.id}`;
         if(socket){
+        const roomName = `room-${Math.floor(Math.random() * 1000)}${socket?.id}`;
+        
             socket.emit('joinRoom' , roomName);
-        }
+        
         console.log(roomName);
         
         setRoom(roomName);
         CRnotify();
         setShowModal(true);
+        }
+        else{
+            SRnotify();
+        }
         
         
     }
@@ -273,28 +276,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
     return (
         <>
         <ToastContainer/>
-{/* {
-            chatroom ? 
-                 <div
-            style={{
-               width: chatroom ? '25%' : '0',
-              overflowX: 'hidden',
-              transition: 'width 0.5s',
-              display:'flex',
-              flexShrink:'1',
-              flexDirection:'column',
-              padding:'10px',
-              alignItems:'flex-start',
-              justifyContent:'flex-end',
-             // position:'absolute'
-            }}
-          >
-                    <ChatBox sendMessage={sendMessage} Socket={socket}/> 
-                    
-                    </div>
-                    : <div></div>
- 
-        } */}
+
  <div className="sketch">
     
         <canvas 
@@ -319,7 +301,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
 
         
     }}>
-        {chatroom ?     <ChatBox sendMessage={sendMessage} Socket={socket}/> : ''
+        {chatroom && socket ?     <ChatBox sendMessage={sendMessage} Socket={socket}/> : ''
 }
     </div>
        
@@ -329,8 +311,8 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
    
     <div style={{display:'flex'}}>
         <button onClick={createRoom} className="btn">Create Room</button>
-        <button onClick={joinRoomButtonHandler} className="btn">Join Room</button>
-        <button onClick={exit} className="btn">EXIT</button>
+        <button onClick={joinRoomButtonHandler} disabled={!socket} className="btn">Join Room</button>
+        <button onClick={exit} disabled = {!socket} className="btn">EXIT</button>
         
     </div>
         </div>
