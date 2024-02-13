@@ -1,9 +1,38 @@
-const {Server} = require('socket.io');
+import express from 'express';
+import { CLIENT_URL } from '../../Constant';
+import cors from 'cors';
+import { Auth } from '../routes';
+import { errorHandler } from '../middleware/errorHandler';
+import { Server } from 'socket.io';
 
-const io = new Server({
-    cors: "http://localhost:5173/"
-});
-const rooms = {};
+interface Room{
+    [key : string] : string
+}
+
+const app = express();
+const PORT = process.env.PORT || 8000;
+app.use(cors(
+   {
+    origin : CLIENT_URL,
+    
+   } 
+
+))
+app.use(express.json());
+app.use(errorHandler);
+app.use(Auth.BASE_URL , Auth.router);
+
+const server = app.listen(()=>{
+    console.log(`server is running at port * ${PORT}`);
+    
+})
+
+const io = new Server(server , {
+    cors : {
+        origin : CLIENT_URL
+    }
+})
+const rooms : Room  = {};
 io.on('connection' , (socket) => {
 
     socket.on('joinRoom' , (room) =>{
@@ -38,6 +67,7 @@ io.on('connection' , (socket) => {
         const room = rooms[socket.id];
         if (room) {
             io.to(room).emit('userLeft', socket.id);
+            //@ts-ignorets
             delete rooms[socket.id];
         }
         console.log(rooms);
@@ -46,6 +76,3 @@ io.on('connection' , (socket) => {
 
 })
 
-io.listen(5000 ,  () => {
-    console.log('Server Started at 5000');
-});
