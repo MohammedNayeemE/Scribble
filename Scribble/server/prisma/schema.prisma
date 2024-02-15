@@ -20,3 +20,4 @@ model User{
   credits Int @default(500)
   
 }
+

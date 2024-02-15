@@ -3,6 +3,7 @@ import NavBar from './Navbar';
 import '../App.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 function Home() {
     const [loading , setLoading] = useState(false);
     const navigate = useNavigate();

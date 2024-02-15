@@ -2,7 +2,7 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client'
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET , TOKEN_EXPIRES_DATE } from '../../Constant';
+import { JWT_SECRET , TOKEN_EXPIRES_DATE } from '../constant';
 import { Request , Response } from 'express';
 
 const BASE_URL = 'auth/'
@@ -10,10 +10,7 @@ const BASE_URL = 'auth/'
 const app = express();
 const prisma = new PrismaClient();
 const router = express.Router();
-// catch(error){
-//         console.error();
-//         return res.status(500).json({message : 'Internal Server Error'});
-//      }
+
 
 //@sign-up
 router.post('/signup' , async (req : Request , res : Response) =>{
@@ -86,4 +83,3 @@ const MODULE = {
     BASE_URL
 }
 export default MODULE;
-
