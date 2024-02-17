@@ -24,7 +24,7 @@ const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatr
     const [joinshowModal , setjoinshowModal] = useState<boolean>(false);
     
     useEffect(() => {
-        const newSocket = io('http://localhost:5000');
+        const newSocket = io('http://localhost:8000/' || 'http://localhost:6969/');
         
         newSocket.on('connect' , () =>{
             console.log(newSocket , `Connection Establised`);

@@ -1,19 +1,20 @@
 import express from 'express';
-import { CLIENT_URL } from '../constant';
+import { CLIENT_URL } from '../constants/constant';
 import cors from 'cors';
-import { Auth } from '../routes';
-import { errorHandler } from '../middleware/errorHandler';
+import { Auth } from '../routes/route';
+import errorHandler from '../middleware/errorHandler';
 import { Server } from 'socket.io';
 
 interface Room{
-    [key : string] : string
+    [key : string] : string;
 }
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 app.use(cors(
    {
-    origin : CLIENT_URL,
+    credentials : true,
+    origin : CLIENT_URL
     
    } 
 
@@ -21,9 +22,12 @@ app.use(cors(
 app.use(express.json());
 app.use(errorHandler);
 app.use(Auth.BASE_URL , Auth.router);
-
-const server = app.listen(()=>{
+app.get('/' , (req , res) =>{
+    res.send('working');
+})
+const server = app.listen( PORT , ()=>{
     console.log(`server is running at port * ${PORT}`);
+   
     
 })
 
