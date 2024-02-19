@@ -19,6 +19,7 @@ app.use(cors(
    } 
 
 ))
+
 app.use(express.json());
 app.use(errorHandler);
 app.use(Auth.BASE_URL , Auth.router);

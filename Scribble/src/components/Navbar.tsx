@@ -1,5 +1,7 @@
 import './components.css';
+import { useNavigate } from 'react-router-dom';
 const NavBar = ()=>{
+    const navigate = useNavigate();
     return(
         <>
     <nav style={{margin:'2px' ,padding:'2px'   , borderRadius:'8px'}}>
@@ -9,14 +11,15 @@ const NavBar = ()=>{
         </div>
         <div className='navlist'>
             <li>HOME</li>
-            <li>ABOUT</li>
-            <li>CONTACTUS</li>
-            <li>STATUS</li>
+            
+            <li><a href="https:github.com/MohammedNayeemE/Scribble">CONTRIBUTE</a></li>
+            <li>GALLERY</li>
          <div>
             <img src='chefewa.jpg' alt='profile pic' 
             style= {{
               border:'none' , borderRadius:'50%' ,width:'50px' , cursor:'pointer'
             }}
+            onClick={() => navigate('/auth/login')}
             />
         </div>   
         </div>

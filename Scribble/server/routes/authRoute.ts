@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { JWT_SECRET , TOKEN_EXPIRES_DATE } from '../constants/constant';
 import { Request , Response } from 'express';
 
-const BASE_URL = 'auth/';
+const BASE_URL = '/auth/';
 
 const app = express();
 const prisma = new PrismaClient();

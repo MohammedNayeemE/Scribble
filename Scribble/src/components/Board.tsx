@@ -18,7 +18,7 @@ interface MyBoard {
 
 const  Board: React.FC<MyBoard> = ({brushColor , brushSize , eraserState , chatroom }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
-    const [imagedata , setimagedata] = useState('');
+    
     const [room , setRoom] = useState<string>('');
     const [showModal , setShowModal] = useState<boolean>(false);
     const [joinshowModal , setjoinshowModal] = useState<boolean>(false);
