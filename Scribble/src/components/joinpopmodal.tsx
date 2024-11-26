@@ -1,4 +1,3 @@
-import React from 'react'
 import { Modal  , Button} from 'react-bootstrap'
 import { useState } from 'react';
 
@@ -9,7 +8,7 @@ interface Req {
 
 }
 function Joinpopmodal({ShowState , JoinRoom , OnClick}:Req) {
-    const [show , setshow] = useState<boolean>(ShowState);
+    const [show ] = useState<boolean>(ShowState);
     const [text , setText] = useState<string>('');
     const handleClose = ()=>{
         JoinRoom()
