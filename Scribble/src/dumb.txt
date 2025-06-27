@@ -48,3 +48,23 @@ const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     chalo kuch toh sikha ki mouseEvent bhi hota hey
 
     yeh try karenge rukh dekhta hun.
+
+
+
+        
+ <div 
+    style={{
+        position:'absolute',
+        transition : 'transform 0.5s',
+        right :0,
+        transform : `translateX(${chatroom ? '0' : '100%'})`,
+
+        
+    }}>
+        {chatroom && socket ?     <ChatBox sendMessage={sendMessage} Socket={socket}/> : ''
+}
+    </div>
+       
+    </div>
+
+    chat logic for later

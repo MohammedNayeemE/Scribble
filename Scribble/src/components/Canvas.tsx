@@ -1,106 +1,124 @@
-import Board from "./Board";
-import '../App.css';
-import {useState} from 'react';
-const CanvasDrawing = () =>{
 
-    const [brushColor, setBrushColor] = useState<string>('black');
-    const [brushSize, setBrushSize] = useState<number>(5);
-    const [isErasing , setIsErasing] = useState<boolean>(false);
-    const [croomopen , setcroomopen] = useState<boolean>(false);
-    const [sidebar , setsidebar] = useState<boolean>(false);
-    //const [exit , setexit] = useState<boolean>(false);
-    const toggleEraser = () => {
-      setIsErasing(!isErasing);
+import { useRef, useCallback,useEffect} from 'react';
+import Board from './Board';
+
+const Canvas = () => {
+  const isDrawing = useRef(false);
+  const lastX = useRef(0);
+  const lastY = useRef(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const undoStack = useRef<ImageData[]>([]);
+  const redoStack = useRef<ImageData[]>([]);
+
+  const saveStack = (ctx : CanvasRenderingContext2D) => {
+	  const snapShot = ctx.getImageData(0 , 0 , ctx.canvas.width , ctx.canvas.height);
+	  undoStack.current.push(snapShot);
+	  redoStack.current = [];
+  }
+
+  const undo = (ctx : CanvasRenderingContext2D) => {
+	  if(undoStack.current.length == 0) return;
+	  const currState = ctx.getImageData(0 , 0 , ctx.canvas.width , ctx.canvas.height);
+	  redoStack.current.push(currState);
+	  const prevState = undoStack.current.pop();
+	  if(prevState) {
+		  ctx.putImageData(prevState , 0 , 0);
+	  }
+  }
+
+  const redo = (ctx : CanvasRenderingContext2D) => {
+	  if(redoStack.current.length == 0) return;
+	  const currState = ctx.getImageData(0 , 0 , ctx.canvas.width , ctx.canvas.height);
+	  undoStack.current.push(currState);
+	  const nextState = redoStack.current.pop();
+	  if(nextState) {
+		  ctx.putImageData(nextState , 0 , 0);
+	  }
+  }
+
+  useEffect(()=> {
+	  const handler = (e : KeyboardEvent) => {
+		  const canvas = canvasRef.current;
+		  if(!canvas) return;
+
+		  const ctx = canvas.getContext('2d');
+		  if(!ctx) return ;
+
+		  if(e.ctrlKey && e.key === 'u') {
+			  e.preventDefault();
+			  console.log('pressed');
+			  undo(ctx);
+		  }
+		  else if(e.ctrlKey && e.key === 'z'){
+			  e.preventDefault();
+			  console.log('pressed');
+			  redo(ctx);
+		  } 
+	  }
+
+	  window.addEventListener('keydown' , handler);
+	  return () => window.removeEventListener('keydown' , handler);
+  } , []);
+
+  useEffect(() => {
+	window.focus();
+  } , []);
+
+  const handleDraw = useCallback((ctx: CanvasRenderingContext2D) => {
+	    const canvas = ctx.canvas;
+	    canvasRef.current = canvas;
+	    ctx.strokeStyle = 'black';
+	    ctx.lineWidth = 5;
+	    ctx.lineCap = 'round';
+	    ctx.lineJoin = 'round';
+
+	    const handleMouseDown = (e: MouseEvent) => {
+	      if (!containerRef.current) return;
+	      isDrawing.current = true;
+
+	      const x = e.clientX + (containerRef.current?.scrollLeft || 0);
+	      const y = e.clientY + (containerRef.current?.scrollTop || 0);
+	      lastX.current = x;
+	      lastY.current = y;
+	      saveStack(ctx);
     };
-    const toggleChatRoom = () =>{
-      setcroomopen(!croomopen);
-    }
-    const toggleSideBar = () =>{
-      setsidebar(!sidebar);
-    }
-    
-    return(
-      <>
-      <div className="App">
-        <h1 className = "text-[45px] ">SCRIBBLE</h1>
-        <div style={{
-          display:'flex',
-          width:'100%',
-          justifyContent:'space-between'
-        }}>
-            
-              <img src= {
-                sidebar ? 'close.svg' : 'open.svg'
-              }
-               alt="close button" onClick={toggleSideBar}
-               style={{cursor:'pointer'}} 
-               />
-              <img src= {
-                'meeting.png'
-              }
-               alt="close button" onClick={toggleChatRoom}
-               style={{cursor:'pointer' ,  border:'none' , background : croomopen ? 'red' : '#0CED50'}} 
-               />
-            
 
-        </div>
-        <div style={{ display: 'flex', height: '100%' }}>
-          {/* Sidebar */}
-          
-          <div
-            style={{
-               width: sidebar ? '25%' : '0',
-              overflowX: 'hidden',
-              transition: 'width 0.5s',
-              display:'flex',
-              flexShrink:'1',
-              flexDirection:'column',
-              padding:'10px',
-              alignItems:'flex-end',
-             // position:'absolute'
-            }}
-          >
-            <div className="tools" style={{ padding: '10px' }}>
-              <div>
-                <span style={{ fontFamily: 'Comic Sans MS' }}>COLOR: </span>
-                <input type="color" value={brushColor} onChange={(e) => setBrushColor(e.target.value)} />
-              </div>
-              <div>
-                <span style={{ fontFamily: 'Comic Sans MS' }}>SIZE: </span>
-                <input
-                  type="range"
-                  color="#fac176"
-                  min="1"
-                  max="100"
-                  value={brushSize}
-                  onChange={(e) => setBrushSize(Number(e.target.value))}
-                />
-                <span>{brushSize}</span>
-              </div>
-              <div>
-                <img src={isErasing ? 'diseraser.svg' : 'erasur.svg'} alt="erasurpic" style={{
-                  cursor:'pointer',
-                  margin:'3px'
-                }}
-                onClick={toggleEraser}
-                />
-              </div>
-              
-              
-            </div>
-          </div>
+    const handleMouseMove = (e: MouseEvent) => {
+	      if (!isDrawing.current || !containerRef.current) return;
 
-          {/* Main content */}
-          <div style={{ flex: '1', overflowY: 'auto', padding: '5px' }}>
-            <Board brushColor={brushColor} brushSize={brushSize} eraserState={isErasing} chatroom={croomopen}  />
-          </div>
+	      const x = e.clientX + (containerRef.current?.scrollLeft || 0);
+	      const y = e.clientY + (containerRef.current?.scrollTop || 0);
 
+	      ctx.beginPath();
+	      ctx.moveTo(lastX.current, lastY.current);
+	      ctx.lineTo(x, y);
+	      ctx.stroke();
 
+	      lastX.current = x;
+	      lastY.current = y;
+    };
 
+    const handleMouseUp = () => {
+      isDrawing.current = false;
+    };
 
-        </div>
-      </div>
-    </>
-    )
-}
-export default CanvasDrawing;
+    canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mouseup', handleMouseUp);
+    canvas.addEventListener('mouseleave', handleMouseUp);
+
+    return () => {
+      canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseup', handleMouseUp);
+      canvas.removeEventListener('mouseleave', handleMouseUp);
+    };
+  }, []);
+
+  return <Board onDraw={handleDraw} containerRef={containerRef} />;
+};
+
+export default Canvas;
+
